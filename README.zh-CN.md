@@ -91,6 +91,26 @@ g++ -std=c++17 -O2 cpp/harvest.cpp -o harvest     # 或者 make
 
 Windows 下运行 `.\cpp\build.ps1` 可同时编译工具和测试程序。
 
+## 图形界面
+
+Python 版自带一个 Tkinter 界面，不需要额外装包：
+
+```bash
+python python/harvest_gui.py
+```
+
+填网址、写选择器，点「开始抓取」。抓取在后台线程里跑，窗口不会卡住。
+
+- **表格** 标签页：一个记录选择器 + 每行一个字段（`名称=选择器[@属性]`）
+- **单列** 标签页：一个选择器，每个匹配输出一个值——就是「抓该页所有用户名」的用法
+- **分析页面**：列出页面上重复出现的元素组，不用先读 HTML 就能挑选择器
+- **载入示例**：一键填入 quotes 演示；**载入/保存 recipe** 让表单可复用
+- **停止**：在页面之间干净地停下；**去重**、**遵守 robots.txt** 都是勾选框；
+  结果表格预览前 300 行
+- 结果按你选的路径写成 `.csv` / `.tsv` / `.json` / `.jsonl` / `.txt`，可直接在窗口里打开
+
+这个模块在没有窗口的情况下也能导入，相关测试在没有 tkinter 或没有显示器的机器上会自动跳过。
+
 ## 命令行
 
 ```
@@ -207,7 +227,7 @@ A Light in the Attic,£51.77,star-rating Three,In stock,https://books.toscrape.c
 
 ```bash
 make test
-python -m unittest discover -s python -p "test_*.py"   # 44 个测试
+python -m unittest discover -s python -p "test_*.py"   # 53 个测试（9 个是 GUI）
 ./cpp/test_harvest                                     # 80 项检查
 ```
 
@@ -236,7 +256,9 @@ cmp py.csv cpp.csv
 harvest/
 ├── python/
 │   ├── harvest.py           # 完整实现，仅标准库
-│   └── test_harvest.py      # 44 个 unittest 用例
+│   ├── harvest_gui.py       # Tkinter 图形界面
+│   ├── test_harvest.py      # 44 个 unittest 用例
+│   └── test_gui.py          # 9 个 GUI 用例（无显示环境时自动跳过）
 ├── cpp/
 │   ├── harvest.cpp          # 完整实现，C++17，单文件
 │   └── test_harvest.cpp     # 80 项检查，直接 include harvest.cpp

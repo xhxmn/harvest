@@ -110,6 +110,30 @@ g++ -std=c++17 -O2 cpp/harvest.cpp -o harvest     # or: make
 
 On Windows, `.\cpp\build.ps1` compiles both the tool and its test runner.
 
+## Graphical interface
+
+The Python implementation ships with a Tkinter front-end — no extra packages:
+
+```bash
+python python/harvest_gui.py
+```
+
+Type the URL, describe the records, press 开始抓取. The crawl runs on a worker
+thread, so the window keeps repainting while pages load.
+
+- **表格** tab: a record selector plus one field per line (`name=selector[@attr]`)
+- **单列** tab: a single selector, one value per match — the "all usernames" case
+- **分析页面** lists the repeating element groups on the page, so you can pick
+  selectors without reading the HTML source first
+- **载入示例** fills in the quotes demo; **载入/保存 recipe** round-trips the form
+- **停止** stops cleanly between pages; **去重** and **遵守 robots.txt** are
+  check boxes, and the preview table shows the first 300 rows
+- results are written to the path you choose (`.csv`, `.tsv`, `.json`, `.jsonl`,
+  `.txt`) and can be opened from the window
+
+The GUI imports without opening a window, and its tests skip themselves on
+machines without tkinter or a display.
+
 ## Command line
 
 ```
@@ -230,7 +254,7 @@ when it is technically possible.
 
 ```bash
 make test          # or: npm-less, just two commands
-python -m unittest discover -s python -p "test_*.py"   # 44 tests
+python -m unittest discover -s python -p "test_*.py"   # 53 tests (9 of them GUI)
 ./cpp/test_harvest                                     # 80 checks
 ```
 
@@ -260,7 +284,9 @@ cmp /tmp/py.csv /tmp/cpp.csv
 harvest/
 ├── python/
 │   ├── harvest.py           # the whole tool, standard library only
-│   └── test_harvest.py      # 44 unittest cases
+│   ├── harvest_gui.py       # Tkinter front-end
+│   ├── test_harvest.py      # 44 unittest cases
+│   └── test_gui.py          # 9 GUI cases (skipped when headless)
 ├── cpp/
 │   ├── harvest.cpp          # the whole tool, C++17, single file
 │   └── test_harvest.cpp     # 80 checks, includes harvest.cpp
