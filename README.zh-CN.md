@@ -12,6 +12,7 @@ python python/harvest.py --recipe recipes/authors.json --out results/authors.txt
 ```
 
 <p align="center">
+  <a href="https://github.com/xhxmn/harvest/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/xhxmn/harvest/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Python 3.8+" src="https://img.shields.io/badge/python-3.8%2B-blue">
   <img alt="C++17" src="https://img.shields.io/badge/c%2B%2B-17-blue">
   <img alt="Dependencies: none" src="https://img.shields.io/badge/dependencies-none-brightgreen">
