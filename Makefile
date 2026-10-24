@@ -8,7 +8,7 @@ CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra
 BIN := cpp/harvest$(EXE)
 TESTBIN := cpp/test_harvest$(EXE)
 
-.PHONY: all test python-test cpp-test demo clean
+.PHONY: all test python-test cpp-test demo gui clean
 
 all: $(BIN)
 
@@ -28,6 +28,9 @@ test: python-test cpp-test
 
 demo:
 	python python/harvest.py --recipe recipes/authors.json --out results/authors.txt
+
+gui:
+	python python/harvest_gui.py
 
 clean:
 	-rm -f $(BIN) $(TESTBIN)
