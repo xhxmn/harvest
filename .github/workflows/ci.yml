@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.9', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests
+        run: python -m unittest discover -s python -p "test_*.py" -v
+
+  cpp:
+    name: C++17
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -o cpp/test_harvest cpp/test_harvest.cpp
+          g++ -std=c++17 -O2 -Wall -Wextra -o cpp/harvest cpp/harvest.cpp
+      - name: Unit tests
+        run: ./cpp/test_harvest
+      - name: Smoke test
+        run: ./cpp/harvest --version
+
+  parity:
+    name: Python == C++
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build C++
+        run: g++ -std=c++17 -O2 -o cpp/harvest cpp/harvest.cpp
+      - name: Compare output on a local fixture
+        run: |
+          python -m http.server 8765 --directory fixtures &
+          sleep 1
+          python python/harvest.py http://127.0.0.1:8765/page1.html \
+            --record .item --field "name=.name" --field "price=.price" \
+            --next "a.next" --max-pages 2 --delay 0 --out /tmp/py.csv --quiet
+          ./cpp/harvest http://127.0.0.1:8765/page1.html \
+            --record .item --field "name=.name" --field "price=.price" \
+            --next "a.next" --max-pages 2 --delay 0 --out /tmp/cpp.csv --quiet
+          cmp /tmp/py.csv /tmp/cpp.csv
+          cat /tmp/py.csv

@@ -1,0 +1,16 @@
+{
+  "name": "books",
+  "description": "Every book in the catalogue: title, price, rating, stock and product URL.",
+  "url": "https://books.toscrape.com/",
+  "record": "article.product_pod",
+  "fields": {
+    "title": "h3 a@title",
+    "price": ".price_color",
+    "rating": "p.star-rating@class",
+    "availability": "p.instock.availability",
+    "url": "h3 a@href"
+  },
+  "next": "li.next a",
+  "maxPages": 50,
+  "delay": 250
+}

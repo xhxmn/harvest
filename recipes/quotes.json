@@ -1,0 +1,15 @@
+{
+  "name": "quotes",
+  "description": "All 100 quotes with author, tags and author page.",
+  "url": "https://quotes.toscrape.com/",
+  "record": ".quote",
+  "fields": {
+    "quote": ".text",
+    "author": ".author",
+    "tags": ".tags a.tag",
+    "author_url": "a[href^=\"/author/\"]@href"
+  },
+  "next": "li.next a",
+  "maxPages": 10,
+  "delay": 300
+}

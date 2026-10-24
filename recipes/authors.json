@@ -1,0 +1,10 @@
+{
+  "name": "authors",
+  "description": "Every distinct quote author on quotes.toscrape.com — the \"who is on this site\" example.",
+  "url": "https://quotes.toscrape.com/",
+  "select": ".author",
+  "next": "li.next a",
+  "maxPages": 10,
+  "dedupe": true,
+  "delay": 300
+}
